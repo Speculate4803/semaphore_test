@@ -1,7 +1,13 @@
 ---
-- hosts: my_servers
-  become: true
+- name: Gather OS Information
+  hosts: all
+  become: false
   tasks:
+    - name: Gather OS facts
+      ansible.builtin.setup:
+        gather_subset:
+          - "!all"
+          - "min"
     - name: Print OS info
-      ansible.builtin.package:
-        name: apache2
+      ansible.builtin.debug:
+        msg: "Operating System: {{ ansible_distribution }} {{ ansible_distribution_version }}, Kernel: {{ ansible_kernel }}"
